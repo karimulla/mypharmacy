@@ -7,8 +7,8 @@
 
 if (!$user->authenticated)
 {
-	header('Location: index.php');
-	die();
+  header('Location: index.php');
+  die();
 }
 $u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
 */
@@ -21,13 +21,37 @@ $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
 
 
-//display data 
+//get all distributor names
+$distributor_names = ""; 
+$tsql0 = "SELECT Name FROM dbo.Clients where TypeOfClient = 2"; 
+$stmt0 = sqlsrv_query($conn, $tsql0); 
+if($stmt0) 
+{ 
+  while($row = sqlsrv_fetch_array($stmt0) ) 
+  { 
+       if($_GET['name'] == $row[0]) {
+          $distributor_names = $distributor_names . '<option selected="selected" value="' . $row[0].'">' . $row[0] .'</option>'; 
+       } else {
+          $distributor_names = $distributor_names . '<option value="' . $row[0].'">' . $row[0] .'</option>';
+       }
+       
+  }
+} 
 
-$tsql = "select j1.BillNo ,j2.Name ,j2.PhoneNumber,j3.Name ,j5.StoreName,j1.TotalDiscount,j1.TotalGrossPrice,j1.TotalPrice,j1.TotalTaxAmount, j6.StartDate from dbo.Orders j1 join dbo.Clients j2 on j1.ClientID = j2.ClientID join SalesMen j3 on j1.SalesManID = j3.SalesManID join Stores j5 on j5.StoreID = j1.StoreID join dbo.OrderInfoes j6 on j1.OrderID = j6.OrderID where j1.Clienttype = 2"; 
+
+//display all data  
+
+$tsql = "select j1.BillNo ,j2.Name ,j2.PhoneNumber,j3.Name ,j5.StoreName,j1.TotalDiscount,j1.TotalGrossPrice,j1.TotalPrice,j1.TotalTaxAmount, j6.StartDate from dbo.Orders j1 join dbo.Clients j2 on j1.ClientID = j2.ClientID join SalesMen j3 on j1.SalesManID = j3.SalesManID join Stores j5 on j5.StoreID = j1.StoreID join dbo.OrderInfoes j6 on j1.OrderID = j6.OrderID where j1.Clienttype = 2 and (j6.StartDate between ? and ?)"; 
 /* Determine which row numbers to display. */ 
 //print $rowsPerPage . "low" . $lowRowNum . "high:" . $highRowNum;
 
+$fromDate1 = strtotime($_GET['fromDate']);
+$fromDate = date('Y-m-d',$fromDate1);
 
+$toDate1 = strtotime($_GET['toDate']);
+$toDate = date('Y-m-d',$toDate1 );
+
+$params = array(&$fromDate, &$toDate);
 
 /* Execute the query. */ 
 $stmt2 = sqlsrv_query($conn, $tsql, $params); 
@@ -68,7 +92,7 @@ while($row = sqlsrv_fetch_array($stmt2) )
       <?php //echo $config->site_title ?>
     </title>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
   </head>
   
   <body>
@@ -103,6 +127,22 @@ while($row = sqlsrv_fetch_array($stmt2) )
         <h1>
           Distributor Purchases Report
         </h1>
+
+        <div class="row">
+          <div class="col-md-10">
+          <form action="report-distributor-purchases.php">
+            From:
+            <input type="date" name="fromDate">
+            <input type="date" name="toDate">   
+            <br><br>
+            <select name="name">
+              <?php print $distributor_names; ?>
+            </select>         
+            <input type="submit">
+          </form>
+
+          </div>
+        </div>
         
         <div class="row">
           <div class="col-md-10">
@@ -118,12 +158,12 @@ while($row = sqlsrv_fetch_array($stmt2) )
         </div>
         
         <table class="table">
-		  <thead>
-		    <tr>
-		      
-		      <th>Order No</th>
-		      <th>Distributor name</th>
-		      <th>PhoneNumber</th>
+      <thead>
+        <tr>
+          
+          <th>Order No</th>
+          <th>Distributor name</th>
+          <th>PhoneNumber</th>
           <th>Employee Name</th>
           <th>StoreName</th>
           <th>TotalDiscount</th>
@@ -133,13 +173,13 @@ while($row = sqlsrv_fetch_array($stmt2) )
           <th>Order Date</th>
 
 
-		    </tr>
-		  </thead>
-		  <tbody>
-		  	<?php print $data_rows;	?>
-		    
-		  </tbody>
-		</table>
+        </tr>
+      </thead>
+      <tbody>
+        <?php print $data_rows; ?>
+        
+      </tbody>
+    </table>
       <?php print $data_pagination; ?>
 
       </div>
@@ -152,6 +192,3 @@ while($row = sqlsrv_fetch_array($stmt2) )
   </body>
 
 </html>
-
-
-
