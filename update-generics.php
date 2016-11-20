@@ -7,8 +7,8 @@
 
 if (!$user->authenticated)
 {
-	header('Location: index.php');
-	die();
+  header('Location: index.php');
+  die();
 }
 $u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
 */
@@ -18,62 +18,18 @@ $u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
 $serverName = "sql5019.SmarterASP.NET"; //serverName\instanceName
 $connectionInfo = array( "Database"=>"db_a0fdb5_mirakql", "UID"=>"DB_A0FDB5_mirakql_admin", "PWD"=>"mirakql1");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
-$rowsPerPage = 100;
 
+$genericID = $_GET['genricID'];
 
-
-$tsql = "SELECT COUNT(ManufactureID) FROM dbo.Manufactures"; 
-/* Execute the query. */ 
-$stmt = sqlsrv_query($conn, $tsql); 
-if($stmt === false) 
-{ 
-    echo "Error in query execution."; 
-    die( print_r( sqlsrv_errors(), true)); 
-}
-$data_pagination = "";
-/* Get the number of rows returned. */ 
-$rowsReturned = sqlsrv_fetch_array($stmt); 
-if($rowsReturned === false) 
-{ 
-    echo "Error in retrieving number of rows."; 
-    die( print_r( sqlsrv_errors(), true)); 
-} 
-elseif($rowsReturned[0] == 0) 
-{ 
-    echo "No rows returned."; 
-} 
-else 
-{     
-    /* Display page links. */ 
-    $numOfPages = ceil($rowsReturned[0]/$rowsPerPage); 
-    for($i = 1; $i<=$numOfPages; $i++) 
-    { 
-        $pageNum = "?pageNum=$i"; 
-        $data_pagination = $data_pagination . "<a href=$pageNum>" . $i. "</a>&nbsp;&nbsp;"; 
-    } 
-
-}
-
-
-
+print "Generic ID: " . $genericID;
 
 //display data 
 
-$tsql = "SELECT * FROM (SELECT ROW_NUMBER() OVER(ORDER BY ManufactureID)  AS RowNumber,  ManufactureID,   ManufactureName  FROM dbo.Manufactures)  AS Temp WHERE RowNumber BETWEEN ? AND ?"; 
-/* Determine which row numbers to display. */ 
-$rowsPerPage = 100;
-$lowRowNum = 1; 
-$highRowNum = $rowsPerPage; 
-
-if(isset($_GET['pageNum'])) {
-  $highRowNum = $_GET['pageNum']  * $rowsPerPage;
-  $lowRowNum = $highRowNum - $rowsPerPage +1;  
-} 
-//print $rowsPerPage . "low" . $lowRowNum . "high:" . $highRowNum;
+$tsql = "SELECT Prod_GenricID,  GenricName,   GenricCode, GenricRemarks  FROM dbo.Product_Generic WHERE Prod_GenricID = ? "; 
 
 
 /* Set query parameter values. */ 
-$params = array(&$lowRowNum, &$highRowNum);
+$params = array($genericID);
 
 /* Execute the query. */ 
 $stmt2 = sqlsrv_query($conn, $tsql, $params); 
@@ -84,15 +40,24 @@ if($stmt2 === false)
 } 
 /* Display results. */ 
 $data_rows = "";
+$genericName = "";
+$genericCode = "";
+$genericRemarks = "";
 while($row = sqlsrv_fetch_array($stmt2) ) 
 { 
-     $data_rows = $data_rows . "<tr> <td>" . $row[0] . "</td> <td>" . $row[1] ." </td> <td>" . $row[2] . "</td> </tr>"; 
+    $genericCode = $row[1];
+    $genericName = $row[2];
+    $genericRemarks = $row[3]; 
 }
 
-
-
-
-
+print "Generic ID2: " . $genericID;
+$formData = '<form name="form" method="POST" action="update-generics-submit.php">' . 
+        'Generic Name: <input type="text" name="genericName" value="' . $genericName . '"/> <br>' .
+        'Generic Code: <input type="text" name="genericCode" value="' . $genericCode . '"/> <br>'  .
+        'Generic Remarks: <input type="text" name="genericRemarks" value="' . $genericRemarks . '"/><br><br> '.
+              ' <input type="hidden" name="genericId" value="'. $genericID . '"> '.
+              '<input type="submit"  value="submit"> ' .
+        '</form> ';
 
 
 ?>
@@ -109,7 +74,7 @@ while($row = sqlsrv_fetch_array($stmt2) )
       <?php //echo $config->site_title ?>
     </title>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
-	<link href="css/style.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
   </head>
   
   <body>
@@ -158,22 +123,12 @@ while($row = sqlsrv_fetch_array($stmt2) )
           
         </div>
         
-        <table class="table">
-		  <thead>
-		    <tr>
-		      
-		      <th>Row Number</th>
-		      <th>Manufacture ID</th>
-		      <th>Manufacture Name</th>
-		    </tr>
-		  </thead>
-		  <tbody>
-		  	<?php print $data_rows;	?>
-		    
-		  </tbody>
-		</table>
-      <?php print $data_pagination; ?>
+       
+        <div id="formData">  <?php print $formData; ?></div>
 
+        
+      
+     
       </div>
     </div>
     <!-- /.container -->

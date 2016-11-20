@@ -23,7 +23,7 @@ $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
 //get all distributor names
 $distributor_names = ""; 
-$tsql0 = "SELECT Name FROM dbo.Clients where TypeOfClient = 2"; 
+$tsql0 = "SELECT DoctorName FROM dbo.Doctors"; 
 $stmt0 = sqlsrv_query($conn, $tsql0); 
 if($stmt0) 
 { 
@@ -41,8 +41,8 @@ if($stmt0)
 
 //display all data  
 
-$tsql = "select j1.BillNo,j2.Name,j2.PhoneNumber,j3.Name,j1.TotalDiscount,j1.TotalGrossPrice,j1.TotalPrice,j1.TotalTaxAmount , j7.StartDate from Orders j1 join Clients j2 on j1.ClientID = j2.ClientID join SalesMen j3 on j1.SalesManID = j3.SalesManID join Stores j5 on j5.StoreID = j1.StoreID join (select distinct(OrderInfoes.OrderID), StartDate from OrderInfoes ) j7 on j7.OrderID= j1.OrderID where j1.ClientType =2 and ((select count (ReturnOrderInfoID) from OrderInfoes j6 join Orders on j1.OrderID = j6.OrderID where j6.ReturnOrderInfoID is null or j6.ReturnOrderInfoID =0 )<=0) and j7.StartDate between ? and ?";
-//and j1.ClientID = ? 
+$tsql = "select j1.BillNo,j2.Name,j2.PhoneNumber,j3.Name,j1.TotalDiscount,j1.TotalGrossPrice,j1.TotalPrice,j1.TotalTaxAmount , j7.StartDate from Orders j1 join Clients j2 on j1.ClientID = j2.ClientID join SalesMen j3 on j1.SalesManID = j3.SalesManID join Stores j5 on j5.StoreID = j1.StoreID join (select distinct(OrderInfoes.OrderID), StartDate from OrderInfoes ) j7 on j7.OrderID= j1.OrderID join Doctors j8 on j8.DoctorID = j1.DoctorID where j1.ClientType =1 and ((select count (ReturnOrderInfoID) from OrderInfoes j6 join Orders on j1.OrderID = j6.OrderID where j6.ReturnOrderInfoID is null or j6.ReturnOrderInfoID =0 )<=0) and j7.StartDate between ? and ?";
+//and j1.DoctorID = ? 
 /* Determine which row numbers to display. */ 
 //print $rowsPerPage . "low" . $lowRowNum . "high:" . $highRowNum;
 
@@ -126,12 +126,12 @@ while($row = sqlsrv_fetch_array($stmt2) )
     <div class="container">
       <div class="starter-template">
         <h1>
-          Distributor Purchases Report
+          Doctor wise sales Report
         </h1>
 
         <div class="row">
           <div class="col-md-10">
-          <form action="report-distributor-purchases.php">
+          <form action="report-doctor-sales.php">
             From:
             <input type="date" name="fromDate">
             <input type="date" name="toDate">   
@@ -163,8 +163,9 @@ while($row = sqlsrv_fetch_array($stmt2) )
         <tr>
           
           <th>Order No</th>
-          <th>Distributor name</th>
+          <th>Customer name</th>
           <th>Phone Number</th>
+          
           <th>Employee Name</th>
           <th>Total Discount</th>
           <th>Total GrossPrice</th>
@@ -192,5 +193,4 @@ while($row = sqlsrv_fetch_array($stmt2) )
   </body>
 
 </html>
-
 

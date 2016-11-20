@@ -19,38 +19,27 @@ $serverName = "sql5019.SmarterASP.NET"; //serverName\instanceName
 $connectionInfo = array( "Database"=>"db_a0fdb5_mirakql", "UID"=>"DB_A0FDB5_mirakql_admin", "PWD"=>"mirakql1");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 
+$distributor_names = array(); 
 
+if ($conn){
+    if(($result = sqlsrv_query($conn,"SELECT NameOfProduct FROM dbo.Products")) !== false){
+        while( $obj = sqlsrv_fetch_object( $result )) {
+	        array_push($distributor_names,$obj->NameOfProduct); 
+        }
+    }
+}else{
+    die(print_r(sqlsrv_errors(), true));
+}
 
-//get all distributor names
-$distributor_names = ""; 
-$tsql0 = "SELECT Name FROM dbo.Clients where TypeOfClient = 2"; 
-$stmt0 = sqlsrv_query($conn, $tsql0); 
-if($stmt0) 
-{ 
-  while($row = sqlsrv_fetch_array($stmt0) ) 
-  { 
-       if($_GET['name'] == $row[0]) {
-          $distributor_names = $distributor_names . '<option selected="selected" value="' . $row[0].'">' . $row[0] .'</option>'; 
-       } else {
-          $distributor_names = $distributor_names . '<option value="' . $row[0].'">' . $row[0] .'</option>';
-       }
-       
-  }
-} 
-
-
-//display all data  
-
-$tsql = "select j1.BillNo,j2.Name,j2.PhoneNumber,j3.Name,j1.TotalDiscount,j1.TotalGrossPrice,j1.TotalPrice,j1.TotalTaxAmount , j7.StartDate from Orders j1 join Clients j2 on j1.ClientID = j2.ClientID join SalesMen j3 on j1.SalesManID = j3.SalesManID join Stores j5 on j5.StoreID = j1.StoreID join (select distinct(OrderInfoes.OrderID), StartDate from OrderInfoes ) j7 on j7.OrderID= j1.OrderID where j1.ClientType =2 and ((select count (ReturnOrderInfoID) from OrderInfoes j6 join Orders on j1.OrderID = j6.OrderID where j6.ReturnOrderInfoID is null or j6.ReturnOrderInfoID =0 )<=0) and j7.StartDate between ? and ?";
-//and j1.ClientID = ? 
-/* Determine which row numbers to display. */ 
-//print $rowsPerPage . "low" . $lowRowNum . "high:" . $highRowNum;
+$tsql = "select j1.BillNo,j3.Name,j2.PhoneNumber,j3.Name,j1.TotalDiscount,j1.TotalGrossPrice,j1.TotalPrice,j1.TotalTaxAmount , j7.StartDate from Orders j1 join Clients j2 on j1.ClientID = j2.ClientID join SalesMen j3 on j1.SalesManID = j3.SalesManID join Stores j5 on j5.StoreID = j1.StoreID join (select distinct(OrderInfoes.OrderID), StartDate from OrderInfoes ) j7 on j7.OrderID= j1.OrderID where j1.ClientType =2 and ((select count (ReturnOrderInfoID) from OrderInfoes j6 join Orders on j1.OrderID = j6.OrderID where j6.ReturnOrderInfoID is null or j6.ReturnOrderInfoID =0 )<=0) and j7.StartDate between ? and ?";
 
 $fromDate1 = strtotime($_GET['fromDate']);
 $fromDate = date('Y-m-d',$fromDate1);
 
 $toDate1 = strtotime($_GET['toDate']);
 $toDate = date('Y-m-d',$toDate1 );
+
+
 
 $params = array(&$fromDate, &$toDate);
 
@@ -126,19 +115,25 @@ while($row = sqlsrv_fetch_array($stmt2) )
     <div class="container">
       <div class="starter-template">
         <h1>
-          Distributor Purchases Report
+          Product Purchases Report
         </h1>
 
         <div class="row">
           <div class="col-md-10">
-          <form action="report-distributor-purchases.php">
+          <form action="report-product-purchases.php">
             From:
             <input type="date" name="fromDate">
             <input type="date" name="toDate">   
             <br><br>
             <select name="name">
-              <?php print $distributor_names; ?>
-            </select>         
+	           <?php foreach ($distributor_names as $name): ?>
+	           		<?php if($_GET['name'] == $name) : ?>
+		           		<option selected= "selected" value="<?php print $name;?>"><?php print $name;?></option>	
+	           		<?php else :?>
+	           			<option value="<?php print $name;?>"><?php print $name;?></option>
+	           		<?php endif; ?>	           		
+	           <?php endforeach; ?>
+	        </select>         
             <input type="submit">
           </form>
 
@@ -192,5 +187,6 @@ while($row = sqlsrv_fetch_array($stmt2) )
   </body>
 
 </html>
+
 
 
