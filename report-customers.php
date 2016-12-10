@@ -15,8 +15,8 @@ $u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
 
 
 
-$serverName = "sql5019.SmarterASP.NET"; //serverName\instanceName
-$connectionInfo = array( "Database"=>"db_a0fdb5_mirakql", "UID"=>"DB_A0FDB5_mirakql_admin", "PWD"=>"mirakql1");
+$serverName = "mypharmacytest.database.windows.net"; //serverName\instanceName
+$connectionInfo = array( "Database"=>"mypharmacytest2", "UID"=>"sqladmin", "PWD"=>"admin123!");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 $rowsPerPage = 100;
 
