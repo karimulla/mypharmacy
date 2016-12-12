@@ -145,7 +145,7 @@ while($row = sqlsrv_fetch_array($stmt2) )
         
         <div class="row">
           <div class="col-md-10">
-           
+             Generics Report
              <!-- <h3>
               Welcome, <?php //echo $user->username ?>.
             </h3> 
