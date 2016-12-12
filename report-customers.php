@@ -1,6 +1,6 @@
 <?php
 
-//include('config.php');
+include('config.php');
 /*session_start();
 
 
@@ -15,8 +15,6 @@ $u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
 
 
 
-$serverName = "mypharmacytest.database.windows.net"; //serverName\instanceName
-$connectionInfo = array( "Database"=>"mypharmacytest2", "UID"=>"sqladmin", "PWD"=>"admin123!");
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
 $rowsPerPage = 100;
 
