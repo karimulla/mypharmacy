@@ -115,7 +115,7 @@ while($row = sqlsrv_fetch_array($stmt2) )
     <div class="container">
       <div class="starter-template">
         <h1>
-          Members Area
+          Customers Report
         </h1>
         
         <div class="row">
