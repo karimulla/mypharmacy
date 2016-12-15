@@ -1,47 +1,7 @@
 <?php
 
 session_start();
-
 include('config.php');
-
-if ($get->action == "logout")
-{
-	$user->deauthenticate();
-	$succ = "You have logged out.";
-}
-
-if ($user->authenticated)
-{
-	if ($user->super == 1)
-	{
-		header('Location: admin/index.php');
-	}
-	else
-	{
-		header('Location: members.php');
-	}
-}
-
-if (isset($post->form_action))
-{
-	if ($post->email == "admin") $post->email = "";
-
-	if ($user->login($post->email, $post->password))
-	{
-		if ($user->super == 1)
-		{
-			header('Location: admin/index.php');
-		}
-		else
-		{
-			header('Location: members.php');
-		}
-	}
-	else
-	{
-		$err = "Bad email or password.";
-	}
-}
 
 ?>
 <!DOCTYPE html>
@@ -61,32 +21,7 @@ if (isset($post->form_action))
   </head>
   
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">My Pharmacy</a>
-        </div>
-        <div class="collapse navbar-collapse">
-          <ul class="nav navbar-nav">
-            <li class="active">
-              <a href="#">Home</a>
-            </li>
-            <li>
-              <a href="report.php">Reports</a>
-            </li>
-            <li>
-              <a href="#contact">Contact</a>
-            </li>
-          </ul>
-        </div>
-        <!--/.nav-collapse -->
-      </div>
-    </div>
+    <?php include('navigation.php'); ?>
     <div class="container">
       <div class="starter-template">
         <h1>
@@ -94,32 +29,6 @@ if (isset($post->form_action))
         </h1>
         
         <div class="row">
-		  <?php if ($succ) echo "<div class=\"alert alert-success\">".$succ."</div>" ?>
-		  <?php if ($err) echo "<div class=\"alert alert-danger\">".$err."</div>" ?>
-          <div class="col-md-3">
-			<div class="well">
-				<form method="post">
-				  <div class="form-group">
-					<label>
-					  Email
-					</label>
-					<input type="text" name="email" class="form-control">
-				  </div>
-				  <div class="form-group">
-					<label>
-					  Password
-					</label>
-					<input type="password" name="password" class="form-control">
-				  </div>
-				  <button type="submit" class="btn btn-primary" name="form_action">
-					Login
-				  </button>
-				</form>
-			</div>
-              <hr>
-              <p>No account? <a href="register.php">Register</a></p>
-			  <p>Forgot? <a href="reset.php">Reset your password</a>.</p>
-          </div>
           
         </div>
       </div>
