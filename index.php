@@ -2,7 +2,6 @@
 
 session_start();
 include('config.php');
-print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +31,11 @@ print_r($_SESSION);
           <?php if ($err) echo "<div class=\"alert alert-danger\">".$err."</div>" ?>
           <div class="col-md-3">
             <div class="well">
+
               <?php if (!isset($_SESSION['uNm'])): ?>
+                <?php if(isset($_SESSION['valid_user']) && !$_SESSION['valid_user'])):?>
+                  <div>Invalid User Credentials. Please Try Again!</div>div>
+                <?php endif; ?>
                 <form method="post" action="login.php">
                   <div class="form-group">
                   <label>

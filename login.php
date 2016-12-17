@@ -25,8 +25,9 @@ if($rowsReturned === false)
 } 
 elseif($rowsReturned[0] == 0) 
 { 
-    echo "Invalid User Name Password."; 
-//    header('Location: index.php');
+    $_SESSION['valid_user'] = false;
+    unset($_SESSION['uNm']);
+    header('Location: index.php');
 } else {
     $_SESSION['valid_user'] = true;
     $_SESSION['uNm'] = $username;
