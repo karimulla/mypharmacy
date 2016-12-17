@@ -26,11 +26,13 @@ if($rowsReturned === false)
 elseif($rowsReturned[0] == 0) 
 { 
     echo "Invalid User Name Password."; 
-    header('Location: index.php');
+//    header('Location: index.php');
 } else {
+    echo "Valid User Name Password." . $username; 
     $_SESSION['valid_user'] = true;
     $_SESSION['uNm'] = $username;
-    header('Location: index.php');
+
+//    header('Location: index.php');
     die();
 }
 ?>
