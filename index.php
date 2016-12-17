@@ -24,7 +24,7 @@ include('config.php');
     <div class="container">
       <div class="starter-template">
         <h1>
-          Welcome to SS Pharmacy <?php print $_SESSION['valid_user']; print  $_SESSION['uNm'];?>
+          Welcome to SS Pharmacy <?php print  $_SESSION['uNm'];?>
         </h1>
         <div class="row">
           <?php if ($succ) echo "<div class=\"alert alert-success\">".$succ."</div>" ?>
@@ -36,6 +36,7 @@ include('config.php');
                 <?php if(isset($_SESSION['valid_user']) && !$_SESSION['valid_user']):?>
                   <div style="color:red;">Invalid User Credentials. Please Try Again!</div>
                 <?php endif; ?>
+                <div>Please Login to Access Reports.</div>
                 <form method="post" action="login.php">
                   <div class="form-group">
                   <label>

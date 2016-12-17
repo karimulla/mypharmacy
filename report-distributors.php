@@ -1,17 +1,12 @@
 <?php
 
 include('config.php');
-/*session_start();
-
-
-
-if (!$user->authenticated)
-{
+session_start();
+if((isset($_SESSION['valid_user']) && !$_SESSION['valid_user'])  || (!isset($_SESSION['valid_user']))) {
   header('Location: index.php');
   die();
 }
-$u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
-*/
+
 
 
 

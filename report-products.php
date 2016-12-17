@@ -1,17 +1,8 @@
 <?php
 
 include('config.php');
-/*session_start();
+include('verify-login-status.php');
 
-
-
-if (!$user->authenticated)
-{
-  header('Location: index.php');
-  die();
-}
-$u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
-*/
 
 
 

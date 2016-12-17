@@ -1,18 +1,7 @@
 <?php
 
 include('config.php');
-/*session_start();
-
-
-
-if (!$user->authenticated)
-{
-  header('Location: index.php');
-  die();
-}
-$u = $db->query("SELECT * FROM minty_users WHERE ID > 0");
-*/
-
+include('verify-login-status.php');
 
 
 $conn = sqlsrv_connect( $serverName, $connectionInfo);
