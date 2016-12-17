@@ -3,7 +3,7 @@
 session_start();
 include('config.php');
 
-if($_REQUEST['captcha'] != $_SESSION['captcha']) {
+if($_REQUEST['captcha'] != $_SESSION['digit']) {
   header('Location: index.php?captcacode=invalid');
   die("Sorry, the CAPTCHA code entered was incorrect!");
 }

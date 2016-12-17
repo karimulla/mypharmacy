@@ -1,57 +1,36 @@
 <?php
-session_start();
+// Adapted for The Art of Web: www.the-art-of-web.com
+  // Please acknowledge use of this code by including this header.
 
-$passwd = "";
+  // initialise image with dimensions of 120 x 30 pixels
+  $image = @imagecreatetruecolor(120, 30) or die("Cannot Initialize new GD image stream");
 
-for ($i=0;$i<4; $i++)
-	$passwd .= chr(rand(97, 122));
+  // set background to white and allocate drawing colours
+  $background = imagecolorallocate($image, 0xFF, 0xFF, 0xFF);
+  imagefill($image, 0, 0, $background);
+  $linecolor = imagecolorallocate($image, 0xCC, 0xCC, 0xCC);
+  $textcolor = imagecolorallocate($image, 0x33, 0x33, 0x33);
 
-$_SESSION["captcha"] = $passwd;
+  // draw random lines on canvas
+  for($i=0; $i < 6; $i++) {
+    imagesetthickness($image, rand(1,3));
+    imageline($image, 0, rand(0,30), 120, rand(0,30), $linecolor);
+  }
 
-header('Content-type: image/jpeg');
+  session_start();
 
-$img = imagecreatetruecolor(150, 50);
-$bg = imagecolorallocate($img, rand(210, 255), rand(210, 255), rand(210, 255));
-imagefilledrectangle($img, 0, 0, 200, 60, $bg);
+  // add random digits to canvas
+  $digit = '';
+  for($x = 15; $x <= 95; $x += 20) {
+    $digit .= ($num = rand(0, 9));
+    imagechar($image, rand(3, 5), $x, rand(2, 14), $num, $textcolor);
+  }
 
-$right = rand(10, 30);
-$left = 0;
-$width = 150;
+  // record digits in session variable
+  $_SESSION['digit'] = $digit;
 
-while ($left < $width)
-{
-	$poly_points = array($left, 0, $right, 0, rand($right - 25, $right + 25), 60, rand($left - 15, $left + 15), 60);
-	$c = imagecolorallocate($img, rand(210, 255), rand(210, 255), rand(210, 255));
-	imagefilledpolygon($img, $poly_points, 4, $c);
-	$random_amount = rand(10, 30);
-	$left += $random_amount;
-	$right += $random_amount;
-}
-
-$spacing = ($width / 6);
-$x = $spacing;
-
-for ($i = 0; $i < strlen($passwd); $i++)
-{
-	$letter = $passwd[$i];
-	$size = rand(20, 30);
-	$rotation = rand(-30, 30);
-	$y = rand(60 * .70, 60 - $size - 4);
-	$font = "./fonts/AARDC.TTF";
-	
-	$r = rand(100, 255);
-	$g = rand(100, 255);
-	$b = rand(100, 255);
-	
-	$color = imagecolorallocate($img, $r, $g, $b);
-	$shadow = imagecolorallocate($img, $r/3, $g/3, $b/3);
-	imagettftext($img, $size, $rotation, $x, $y, $shadow, $font, $letter);
-	imagettftext($img, $size, $rotation, $x-1, $y-3, $color, $font, $letter);
-	$x += rand($spacing, $spacing * 1.5);
-}
-
-imagejpeg($img);
-imagedestroy($img);
-
-exit();
+  // display image and clean up
+  header('Content-type: image/png');
+  imagepng($image);
+  imagedestroy($image);
 ?>
