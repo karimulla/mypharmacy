@@ -32,7 +32,7 @@ print_r($_SESSION);
           <?php if ($err) echo "<div class=\"alert alert-danger\">".$err."</div>" ?>
           <div class="col-md-3">
             <div class="well">
-              <?php if (isset($_SESSION['uNm'])): ?>
+              <?php if (!isset($_SESSION['uNm'])): ?>
                 <form method="post" action="login.php">
                   <div class="form-group">
                   <label>
