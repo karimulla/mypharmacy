@@ -36,23 +36,31 @@ if($_SESSION['valid_user']!=true){
           <?php if ($err) echo "<div class=\"alert alert-danger\">".$err."</div>" ?>
           <div class="col-md-3">
             <div class="well">
-              <form method="post" action="login.php">
-                <div class="form-group">
-                <label>
-                  Login Id
-                </label>
-                <input type="text" name="loginid" class="form-control">
-                </div>
-                <div class="form-group">
-                <label>
-                  Password
-                </label>
-                <input type="password" name="password" class="form-control">
-                </div>
-                <button type="submit" class="btn btn-primary" name="form_action">
-                Login
-                </button>
-              </form>
+              <?php if($_SESSION['uNm']): ?>
+                <form method="post" action="login.php">
+                  <div class="form-group">
+                  <label>
+                    Login Id
+                  </label>
+                  <input type="text" name="loginid" class="form-control">
+                  </div>
+                  <div class="form-group">
+                  <label>
+                    Password
+                  </label>
+                  <input type="password" name="password" class="form-control">
+                  </div>
+                  <button type="submit" class="btn btn-primary" name="form_action">
+                  Login
+                  </button>
+                </form>
+              <?php else: ?>
+                <form method="post" action="logout.php">
+                  <button type="submit" class="btn btn-primary" name="form_action">
+                  Logout
+                  </button>
+                </form>
+              <?php endif; ?>
             </div>
             <hr>
             <p>No account? <a href="register.php">Register</a></p>
