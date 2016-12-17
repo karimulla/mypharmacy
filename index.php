@@ -33,7 +33,7 @@ include('config.php');
             <div class="well">
 
               <?php if (!isset($_SESSION['uNm'])): ?>
-                <?php if(isset($_SESSION['valid_user']) && !$_SESSION['valid_user'])):?>
+                <?php if(isset($_SESSION['valid_user']) && !$_SESSION['valid_user']):?>
                   <div>Invalid User Credentials. Please Try Again!</div>div>
                 <?php endif; ?>
                 <form method="post" action="login.php">
