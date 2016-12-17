@@ -2,11 +2,7 @@
 
 session_start();
 include('config.php');
-$loggedin_user = "";
-
-if($_SESSION['valid_user']!=true){
-    $loggedin_user = $_SESSION['uNm'];
-}
+print_r($_SESSION);
 ?>
 <!DOCTYPE html>
 <html lang="en">
