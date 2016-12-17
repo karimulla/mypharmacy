@@ -17,6 +17,17 @@ include('config.php');
     </title>
     <link href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/style.css" rel="stylesheet">
+  <script type="text/javascript">
+    function checkForm(form)
+    {
+      if(!form.captcha.value.match(/^\d{5}$/)) {
+        alert('Please enter the CAPTCHA digits in the box provided');
+        form.captcha.focus();
+        return false;
+      }
+      return true;
+    }
+  </script>
   </head>
   
   <body>
@@ -37,7 +48,7 @@ include('config.php');
                   <div style="color:red;">Invalid User Credentials. Please Try Again!</div>
                 <?php endif; ?>
                 <div>Please Login to Access Reports.</div>
-                <form method="post" action="login.php">
+                <form method="post" action="login.php" onsubmit="return checkForm(this);">
                   <div class="form-group">
                   <label>
                     Login Id
@@ -50,6 +61,9 @@ include('config.php');
                   </label>
                   <input type="password" name="password" class="form-control">
                   </div>
+                  <p><img src="/captcha.php" width="120" height="30" border="1" alt="CAPTCHA"></p>
+                  <p><input type="text" size="6" maxlength="5" name="captcha" value=""><br>
+                  <small>copy the digits from the image into this box</small></p>
                   <button type="submit" class="btn btn-primary" name="form_action">
                   Login
                   </button>
