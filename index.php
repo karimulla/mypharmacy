@@ -27,10 +27,34 @@ include('config.php');
         <h1>
           Welcome to My Pharmacy
         </h1>
-        
         <div class="row">
-          
-        </div>
+          <?php if ($succ) echo "<div class=\"alert alert-success\">".$succ."</div>" ?>
+          <?php if ($err) echo "<div class=\"alert alert-danger\">".$err."</div>" ?>
+          <div class="col-md-3">
+            <div class="well">
+              <form method="post" action="login.php">
+                <div class="form-group">
+                <label>
+                  Login Id
+                </label>
+                <input type="text" name="loginid" class="form-control">
+                </div>
+                <div class="form-group">
+                <label>
+                  Password
+                </label>
+                <input type="password" name="password" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary" name="form_action">
+                Login
+                </button>
+              </form>
+            </div>
+            <hr>
+            <p>No account? <a href="register.php">Register</a></p>
+            <p>Forgot? <a href="reset.php">Reset your password</a>.</p>
+          </div>
+        
       </div>
     </div>
     <!-- /.container -->
