@@ -19,9 +19,6 @@
             <li>
               <a href="reports.php">Reports</a>
             </li>
-            <li>
-              <a href="/">Contact</a>
-            </li>
           </ul>
         </div>
         <!--/.nav-collapse -->
