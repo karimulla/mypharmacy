@@ -47,6 +47,9 @@ include('config.php');
                 <?php if(isset($_SESSION['valid_user']) && !$_SESSION['valid_user']):?>
                   <div style="color:red;">Invalid User Credentials. Please Try Again!</div>
                 <?php endif; ?>
+                <?php if(isset($_REQUEST['captcacode'])):?>
+                  <div style="color:red;">Invalid CAPTCHA code. Please Try Again!</div>
+                <?php endif; ?>
                 <div>Please Login to Access Reports.</div>
                 <form method="post" action="login.php" onsubmit="return checkForm(this);">
                   <div class="form-group">
