@@ -2,7 +2,10 @@
 
 session_start();
 include('config.php');
-
+$loggedin_user = "";
+if($_SESSION['valid_user']!=true){
+    $loggedin_user = $_SESSION['uNm'];
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +28,7 @@ include('config.php');
     <div class="container">
       <div class="starter-template">
         <h1>
-          Welcome to My Pharmacy
+          Welcome to My Pharmacy: <?php print $loggedin_user; ?>
         </h1>
         <div class="row">
           <?php if ($succ) echo "<div class=\"alert alert-success\">".$succ."</div>" ?>
