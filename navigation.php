@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -19,9 +22,9 @@
             <li>
               <a href="reports.php">Reports</a>
             </li>
-            <?php if((isset($_SESSION['valid_user']) && !$_SESSION['valid_user'])  || (!isset($_SESSION['valid_user']))): ?>
+            <?php if ((isset($_SESSION['valid_user']) && !$_SESSION['valid_user'])  || (!isset($_SESSION['valid_user']))): ?>
               <li><a href="/index.php">Login</a></li>
-            <?php elseif: ?>
+            <?php else: ?>
               <li><a href="/logout.php">Logout</a></li>
             <?php endif; ?>
           </ul>
